@@ -14,6 +14,13 @@ in
   options = {
     services.network-manager-applet = {
       enable = mkEnableOption "the Network Manager applet";
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.networkmanagerapplet;
+        defaultText = literalExample "pkgs.networkmanagerapplet";
+        description = "The package to use for the nm-applet binary.";
+      };
     };
   };
 
@@ -32,7 +39,7 @@ in
       Service = {
         ExecStart = toString (
           [
-            "${pkgs.networkmanagerapplet}/bin/nm-applet"
+            "${cfg.package}/bin/nm-applet"
             "--sm-disable"
           ] ++ optional config.xsession.preferStatusNotifierItems "--indicator"
         );
